@@ -91,4 +91,12 @@ if(CMAKE_ASM_COMPILER_LOADED)
   endif()
 endif()
 
+if(DEFINED CMAKE_CXX_LINK_FLAGS)
+  message(STATUS "C++ Linker Flags: ${CMAKE_CXX_LINK_FLAGS}")
+endif()
+
+if(DEFINED CMAKE_C_LINK_FLAGS)
+  message(STATUS "C Linker Flags: ${CMAKE_C_LINK_FLAGS}")
+endif()
+
 add_executable(main main.c)

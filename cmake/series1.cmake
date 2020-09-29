@@ -26,7 +26,7 @@ set(CMAKE_C_FLAGS_MINSIZEREL        "${CMAKE_C_FLAGS} -Os")
 #######################################
 ##### C++ Compiler flags Config  ######
 #######################################
-
+#TODO
 
 #######################################
 ##### ASM Compiler flags Config  ######
@@ -41,7 +41,20 @@ set(CMAKE_ASM_FLAGS_MINSIZEREL "${CMAKE_ASM_FLAGS}")
 #######################################
 ######## Linker flags Config  #########
 #######################################
-set(CMAKE_C_LINK_FLAGS "-mcpu=cortex-m4 -mthumb -T test.ld -Xlinker --gc-sections -Xlinker -Map=linkerMapFile.map -mfpu=fpv4-sp-d16 -mfloat-abi=softfp --specs=nano.specs")
+if(NOT DEFINED TARGET_PART)
+  message(FATAL_ERROR "Error: TARGET_PART not defined")
+else()
+  message(STATUS "Target Part: ${TARGET_PART}")
+endif()
+
+set(TARGET_PART_UPPER, "")
+set(TARGET_PART_LOWER, "")
+
+string(TOLOWER ${TARGET_PART} TARGET_PART_LOWER)
+string(TOUPPER ${TARGET_PART} TARGET_PART_UPPER)
+
+set(CMAKE_C_LINK_FLAGS "-mcpu=cortex-m4 -mthumb -T ../gecko_sdk_suite/v2.7/platform/Device/SiliconLabs/${TARGET_PART_UPPER}/Source/GCC/${TARGET_PART_LOWER}.ld -Xlinker --gc-sections -Xlinker -Map=linkerMapFile.map -mfpu=fpv4-sp-d16 -mfloat-abi=softfp --specs=nano.specs")
+#TODO CXX linker flags CMAKE_CXX_LINK_FLAGS
 
 #######################################
 ######### Toolchain Bin Utils #########
