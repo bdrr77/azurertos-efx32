@@ -41,22 +41,5 @@ set(CMAKE_ASM_FLAGS_MINSIZEREL "${CMAKE_ASM_FLAGS}")
 #######################################
 ######## Linker flags Config  #########
 #######################################
-if(NOT DEFINED TARGET_PART)
-  message(FATAL_ERROR "Error: TARGET_PART not defined")
-else()
-  message(STATUS "Target Part: ${TARGET_PART}")
-endif()
-
-set(TARGET_PART_UPPER, "")
-set(TARGET_PART_LOWER, "")
-
-string(TOLOWER ${TARGET_PART} TARGET_PART_LOWER)
-string(TOUPPER ${TARGET_PART} TARGET_PART_UPPER)
-
-set(CMAKE_C_LINK_FLAGS "-mcpu=cortex-m4 -mthumb -T ../gecko_sdk_suite/v2.7/platform/Device/SiliconLabs/${TARGET_PART_UPPER}/Source/GCC/${TARGET_PART_LOWER}.ld -Xlinker --gc-sections -Xlinker -Map=linkerMapFile.map -mfpu=fpv4-sp-d16 -mfloat-abi=softfp --specs=nano.specs")
+set(CMAKE_C_LINK_FLAGS "-mcpu=cortex-m4 -mthumb -T ${SL_TARGET_PART_SOURCE_PATH}/Source/${SL_TOOLCHAIN}/${SL_TARGET_PART_LOWER_CASE}.ld -Xlinker --gc-sections -Xlinker -Map=${CMAKE_PROJECT_NAME}.map -mfpu=fpv4-sp-d16 -mfloat-abi=softfp --specs=nano.specs")
 #TODO CXX linker flags CMAKE_CXX_LINK_FLAGS
-
-#######################################
-######### Toolchain Bin Utils #########
-#######################################
-include(${CMAKE_CURRENT_LIST_DIR}/toolchain.cmake)

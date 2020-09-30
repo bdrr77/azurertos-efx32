@@ -25,15 +25,12 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 ###### Include Platform Specific ######
 ###### toolchain settings        #####
 #######################################
-if(NOT DEFINED EFX32_SERIES)
-  message(STATUS "EFX32_SERIES not defined, trying to compile with host defaults")
+if(NOT DEFINED SL_TARGET_PART)
+  message(STATUS "No Silicon Labs target MCU defined, trying to compile with host defaults")
+  message(STATUS "Hint: Run cmake defining -DSL_TARGET_PART=EFM32GG11B")
 else()
-  if(EFX32_SERIES LESS_EQUAL 2)
-    message(STATUS "Compiling for EFx32 Series : ${EFX32_SERIES}")
-    include(${CMAKE_CURRENT_LIST_DIR}/cmake/series1.cmake)
-  else()
-    message(STATUS "EFX32_SERIES not defined, trying to compile with host defaults")
-  endif()
+  message(STATUS "Compiling for : ${SL_TARGET_PART}")
+  include(${CMAKE_CURRENT_LIST_DIR}/cmake/gecko_sdk_suite.cmake)
 endif()
 
 #######################################
