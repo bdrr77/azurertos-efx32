@@ -23,7 +23,7 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 #######################################
 ###### Include Platform Specific ######
-###### toolchain settings        #####
+###### settings                  ######
 #######################################
 if(NOT DEFINED SL_TARGET_PART)
   message(STATUS "No Silicon Labs target MCU defined, trying to compile with host defaults")
@@ -96,4 +96,16 @@ if(DEFINED CMAKE_C_LINK_FLAGS)
   message(STATUS "C Linker Flags: ${CMAKE_C_LINK_FLAGS}")
 endif()
 
-add_executable(main main.c)
+#######################################
+##### Include Application Specific ####
+##### settings                     ####
+#######################################
+
+if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/application.cmake)
+  include(${CMAKE_CURRENT_LIST_DIR}/application.cmake)
+  message(STATUS "Building complete application using: ${CMAKE_CURRENT_LIST_DIR}/application.cmake")
+else()
+  message(STATUS "Building application using main only")
+  add_executable(main main.c)
+endif()
+
