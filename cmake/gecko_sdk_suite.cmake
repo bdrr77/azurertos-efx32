@@ -60,8 +60,3 @@ if(SL_TARGET_PART_SERIES LESS_EQUAL 2)
 else()
   message(FATAL_ERROR "Error: EFX32_SERIES not defined (${SL_TARGET_PART_SERIES})")
 endif()
-
-set(SL_TARGET_PART_NO_UPPER_CASE, "")
-string(TOUPPER ${SL_TARGET_PART_NO} SL_TARGET_PART_NO_UPPER_CASE)
-add_compile_definitions(${SL_TARGET_PART_NO_UPPER_CASE}=1)
-#message(STATUS "Target Series Found: ${SL_TARGET_PART_SERIES}")

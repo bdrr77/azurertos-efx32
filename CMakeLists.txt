@@ -36,7 +36,6 @@ endif()
 #######################################
 ##### Prints Build Configuration  #####
 #######################################
-
 if(CMAKE_CXX_COMPILER_LOADED)
   message(STATUS "C++ compiler is: ${CMAKE_CXX_COMPILER}")
   message(STATUS "C++ compiler version is: ${CMAKE_CXX_COMPILER_VERSION}")
@@ -101,11 +100,13 @@ endif()
 ##### settings                     ####
 #######################################
 
+#Start from main
+add_executable(${PROJECT_NAME} main.c)
+
 if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/application.cmake)
   include(${CMAKE_CURRENT_LIST_DIR}/application.cmake)
   message(STATUS "Building complete application using: ${CMAKE_CURRENT_LIST_DIR}/application.cmake")
 else()
   message(STATUS "Building application using main only")
-  add_executable(${PROJECT_NAME} main.c)
 endif()
 

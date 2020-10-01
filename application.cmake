@@ -1,6 +1,4 @@
 
-add_executable(${PROJECT_NAME} main.c)
-
 # Minimal compiling sources
 target_sources(${PROJECT_NAME}
     PRIVATE
@@ -25,6 +23,15 @@ target_include_directories(${PROJECT_NAME}
 
     #CMSIS
     ${SL_GECKO_SDK_SUITE_PATH}/platform/CMSIS/Include
+)
+
+set(SL_TARGET_PART_NO_UPPER_CASE, "")
+string(TOUPPER ${SL_TARGET_PART_NO} SL_TARGET_PART_NO_UPPER_CASE)
+#add_compile_definitions(${SL_TARGET_PART_NO_UPPER_CASE}=1)
+
+target_compile_definitions(${PROJECT_NAME}
+    PRIVATE
+        -D${SL_TARGET_PART_NO_UPPER_CASE}=1
 )
 
 # Print executable size
