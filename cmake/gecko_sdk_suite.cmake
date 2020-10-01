@@ -11,7 +11,7 @@ if(NOT DEFINED SL_GECKO_SDK_SUITE_VERSION)
   set(SL_GECKO_SDK_SUITE_VERSION "2.7")
   message(STATUS "SL_GECKO_SDK_SUITE_VERSION Version set to Default : ${SL_GECKO_SDK_SUITE_VERSION}")
 endif()
-set(SL_GECKO_SDK_SUITE_PATH "../gecko_sdk_suite/v${SL_GECKO_SDK_SUITE_VERSION}")
+set(SL_GECKO_SDK_SUITE_PATH "${CMAKE_CURRENT_LIST_DIR}/../gecko_sdk_suite/v${SL_GECKO_SDK_SUITE_VERSION}")
 
 #Checks that SDK is present
 if(NOT EXISTS "${SL_GECKO_SDK_SUITE_PATH}")
@@ -21,9 +21,13 @@ endif()
 #######################################
 #    Part Number Specific Sources     #
 #######################################
+
 #Defines paths names for part number
+set(SL_TARGET_PART, "")
 set(SL_TARGET_PART_UPPER_CASE, "")
 set(SL_TARGET_PART_LOWER_CASE, "")
+
+string(SUBSTRING ${SL_TARGET_PART_NO} 0 10 SL_TARGET_PART)
 string(TOLOWER ${SL_TARGET_PART} SL_TARGET_PART_LOWER_CASE)
 string(TOUPPER ${SL_TARGET_PART} SL_TARGET_PART_UPPER_CASE)
 
@@ -56,3 +60,8 @@ if(SL_TARGET_PART_SERIES LESS_EQUAL 2)
 else()
   message(FATAL_ERROR "Error: EFX32_SERIES not defined (${SL_TARGET_PART_SERIES})")
 endif()
+
+set(SL_TARGET_PART_NO_UPPER_CASE, "")
+string(TOUPPER ${SL_TARGET_PART_NO} SL_TARGET_PART_NO_UPPER_CASE)
+add_compile_definitions(${SL_TARGET_PART_NO_UPPER_CASE}=1)
+#message(STATUS "Target Series Found: ${SL_TARGET_PART_SERIES}")

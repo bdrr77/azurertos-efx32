@@ -25,11 +25,11 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 ###### Include Platform Specific ######
 ###### settings                  ######
 #######################################
-if(NOT DEFINED SL_TARGET_PART)
+if(NOT DEFINED SL_TARGET_PART_NO)
   message(STATUS "No Silicon Labs target MCU defined, trying to compile with host defaults")
-  message(STATUS "Hint: Run cmake defining -DSL_TARGET_PART=EFM32GG11B")
+  message(STATUS "Hint: Run cmake defining -DSL_TARGET_PART_NO=EFM32GG11B820F2048GL192")
 else()
-  message(STATUS "Compiling for : ${SL_TARGET_PART}")
+  message(STATUS "Compiling for : ${SL_TARGET_PART_NO}")
   include(${CMAKE_CURRENT_LIST_DIR}/cmake/gecko_sdk_suite.cmake)
 endif()
 
@@ -106,6 +106,6 @@ if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/application.cmake)
   message(STATUS "Building complete application using: ${CMAKE_CURRENT_LIST_DIR}/application.cmake")
 else()
   message(STATUS "Building application using main only")
-  add_executable(main main.c)
+  add_executable(${PROJECT_NAME} main.c)
 endif()
 
