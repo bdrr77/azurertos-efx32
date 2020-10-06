@@ -22,11 +22,29 @@ endif()
 #    Part Number Specific Sources     #
 #######################################
 
-#Defines paths names for part number
-string(TOUPPER ${SL_TARGET_PART_NO} SL_TARGET_PART_NO_UPPER_CASE)
-string(SUBSTRING ${SL_TARGET_PART_NO} 0 10 SL_TARGET_PART)
+
+#######################################
+#    Detect Series from Part Number   #
+# Defines paths names for part number #
+#######################################
+
+set(SL_TARGET_PART_SERIES 99)
+string(SUBSTRING ${SL_TARGET_PART_NO} 7 1 SL_TARGET_PART_SERIES)
+string(SUBSTRING ${SL_TARGET_PART_NO} 8 1 SL_TARGET_PART_VARIANT)
+
+if(SL_TARGET_PART_VARIANT MATCHES "[1-9]")
+  if(${SL_TARGET_PART_SERIES} EQUAL "2")
+    string(SUBSTRING ${SL_TARGET_PART_NO} 0 9 SL_TARGET_PART)
+  else()
+    string(SUBSTRING ${SL_TARGET_PART_NO} 0 10 SL_TARGET_PART)
+  endif()
+elseif(${SL_TARGET_PART_VARIANT} MATCHES "[A-Z]")
+  string(SUBSTRING ${SL_TARGET_PART_NO} 0 9 SL_TARGET_PART)
+endif()
+
 string(TOLOWER ${SL_TARGET_PART} SL_TARGET_PART_LOWER_CASE)
 string(TOUPPER ${SL_TARGET_PART} SL_TARGET_PART_UPPER_CASE)
+string(TOUPPER ${SL_TARGET_PART_NO} SL_TARGET_PART_NO_UPPER_CASE)
 
 #Checks that Device Part Number has a source folder in the SDK
 if(NOT EXISTS "${SL_GECKO_SDK_SUITE_PATH}/platform/Device/SiliconLabs/${SL_TARGET_PART_UPPER_CASE}")
@@ -44,9 +62,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/toolchain.cmake)
 #######################################
 #  Part Series Specific Build Options #
 #######################################
-#Detect Series from Part Number
-set(SL_TARGET_PART_SERIES 99)
-string(SUBSTRING ${SL_TARGET_PART} 7 1 SL_TARGET_PART_SERIES)
 
 if(NOT SL_TARGET_PART_SERIES)
   set(SL_TARGET_PART_SERIES 0)
