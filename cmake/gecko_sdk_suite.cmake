@@ -23,10 +23,7 @@ endif()
 #######################################
 
 #Defines paths names for part number
-set(SL_TARGET_PART, "")
-set(SL_TARGET_PART_UPPER_CASE, "")
-set(SL_TARGET_PART_LOWER_CASE, "")
-
+string(TOUPPER ${SL_TARGET_PART_NO} SL_TARGET_PART_NO_UPPER_CASE)
 string(SUBSTRING ${SL_TARGET_PART_NO} 0 10 SL_TARGET_PART)
 string(TOLOWER ${SL_TARGET_PART} SL_TARGET_PART_LOWER_CASE)
 string(TOUPPER ${SL_TARGET_PART} SL_TARGET_PART_UPPER_CASE)

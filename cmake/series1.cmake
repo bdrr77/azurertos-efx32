@@ -18,10 +18,10 @@ set(CMAKE_C_STANDARD_REQUIRED   ON)
 
 set(CMAKE_C_FLAGS                   "-mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -c -fmessage-length=0 -fdata-sections -ffunction-sections -Wall")
 
-set(CMAKE_C_FLAGS_DEBUG             "${CMAKE_C_FLAGS} -g3 -gdwarf-2 -O0 -mno-sched-prolog -fno-builtin")
-set(CMAKE_C_FLAGS_RELEASE           "${CMAKE_C_FLAGS} -O2")
-set(CMAKE_C_FLAGS_RELWITHDEBINFO    "${CMAKE_C_FLAGS} -O2 -g")
-set(CMAKE_C_FLAGS_MINSIZEREL        "${CMAKE_C_FLAGS} -Os")
+set(CMAKE_C_FLAGS_DEBUG             "-g3 -gdwarf-2 -O0 -mno-sched-prolog -fno-builtin")
+set(CMAKE_C_FLAGS_RELEASE           "-O2")
+set(CMAKE_C_FLAGS_RELWITHDEBINFO    "-O2 -g")
+set(CMAKE_C_FLAGS_MINSIZEREL        "-Os")
 
 #######################################
 ##### C++ Compiler flags Config  ######
@@ -33,10 +33,10 @@ set(CMAKE_C_FLAGS_MINSIZEREL        "${CMAKE_C_FLAGS} -Os")
 #######################################
 set(CMAKE_ASM_FLAGS "-mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=softfp -c -x assembler-with-cpp")
 
-set(CMAKE_ASM_FLAGS_DEBUG "${CMAKE_ASM_FLAGS} -g3 -gdwarf-2")
-set(CMAKE_ASM_FLAGS_RELEASE "${CMAKE_ASM_FLAGS}")
-set(CMAKE_ASM_FLAGS_RELWITHDEBINFO "${CMAKE_ASM_FLAGS} -g")
-set(CMAKE_ASM_FLAGS_MINSIZEREL "${CMAKE_ASM_FLAGS}")
+set(CMAKE_ASM_FLAGS_DEBUG " -g3 -gdwarf-2")
+set(CMAKE_ASM_FLAGS_RELEASE "")
+set(CMAKE_ASM_FLAGS_RELWITHDEBINFO "-g")
+set(CMAKE_ASM_FLAGS_MINSIZEREL "")
 
 #######################################
 ######## Linker flags Config  #########

@@ -5,7 +5,7 @@ target_sources(${PROJECT_NAME}
     
     #Startup and System
     ${SL_TARGET_PART_SOURCE_PATH}/Source/system_${SL_TARGET_PART_LOWER_CASE}.c
-    ${SL_TARGET_PART_SOURCE_PATH}/Source/${SL_TOOLCHAIN}/startup_${SL_TARGET_PART_LOWER_CASE}.c
+    #${SL_TARGET_PART_SOURCE_PATH}/Source/${SL_TOOLCHAIN}/startup_${SL_TARGET_PART_LOWER_CASE}.S
 
     #Emlib
     ${SL_GECKO_SDK_SUITE_PATH}/platform/emlib/src/em_cmu.c
@@ -25,14 +25,17 @@ target_include_directories(${PROJECT_NAME}
     ${SL_GECKO_SDK_SUITE_PATH}/platform/CMSIS/Include
 )
 
-set(SL_TARGET_PART_NO_UPPER_CASE, "")
-string(TOUPPER ${SL_TARGET_PART_NO} SL_TARGET_PART_NO_UPPER_CASE)
-#add_compile_definitions(${SL_TARGET_PART_NO_UPPER_CASE}=1)
-
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         -D${SL_TARGET_PART_NO_UPPER_CASE}=1
 )
+
+add_library(${PROJECT_NAME}_ASM 
+  STATIC
+    ${SL_TARGET_PART_SOURCE_PATH}/Source/${SL_TOOLCHAIN}/startup_${SL_TARGET_PART_LOWER_CASE}.S
+  )
+
+target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_ASM)
 
 # Print executable size
 add_custom_command(TARGET ${PROJECT_NAME}
@@ -46,5 +49,4 @@ add_custom_command(TARGET ${PROJECT_NAME}
         COMMAND ${OBJCOPY} -O binary ${PROJECT_NAME} ${PROJECT_NAME}.bin)
 
 
-#set_source_file_properties
-#get_source_file_property
+

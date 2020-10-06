@@ -23,7 +23,7 @@ if(SL_TOOLCHAIN MATCHES GCC)
 # which compilers to use
 set(CMAKE_C_COMPILER    arm-none-eabi-gcc)
 set(CMAKE_CXX_COMPILER  arm-none-eabi-g++)
-set(CMAKE_ASM_COMPILER  arm-none-eabi-as)
+set(CMAKE_ASM_COMPILER  arm-none-eabi-gcc)
 set(AR                  arm-none-eabi-ar)
 set(OBJCOPY             arm-none-eabi-objcopy)
 set(OBJDUMP             arm-none-eabi-objdump)
