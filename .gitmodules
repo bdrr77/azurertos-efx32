@@ -1,3 +1,6 @@
 [submodule "gecko_sdk_suite"]
 	path = gecko_sdk_suite
 	url = https://github.com/bdrr77/gecko_sdk_suite.git
+[submodule "threadx"]
+	path = threadx
+	url = https://github.com/azure-rtos/threadx.git
