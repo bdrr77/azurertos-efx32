@@ -12,7 +12,7 @@ In order to build the project, you will need Cmake.
 
 1. In a shell type **mkdir build** 
 2. Then cd into the build folder **cd build**
-3. Call cmake utility, passing your EFx32 series no and Part number **cmake -DEFX32_SERIES=1 -DSL_TARGET_PART=EFM32GG11B -GNinja ..**
+3. Call cmake utility, passing your EFx32 series no and Part number **cmake -DSL_TARGET_PART_NO=EFM32GG11B820F2048GL192 -GNinja ..**
 4. Finally build using cmake **cmake --build .**
 
 ---
