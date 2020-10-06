@@ -34,12 +34,13 @@ else()
 endif()
 
 #######################################
-##### Prints Build Configuration  #####
+##### Prints Build Configuration   ####
+##### before Application settings  ####
 #######################################
 if(CMAKE_CXX_COMPILER_LOADED)
   message(STATUS "C++ compiler is: ${CMAKE_CXX_COMPILER}")
-  message(STATUS "C++ compiler version is: ${CMAKE_CXX_COMPILER_VERSION}")
-  
+
+  message(STATUS "C++ flags, base configuration: ${CMAKE_CXX_FLAGS}")
   if(CMAKE_BUILD_TYPE MATCHES Debug)
     message(STATUS "C++ flags, Debug configuration: ${CMAKE_CXX_FLAGS_DEBUG}")
   elseif(CMAKE_BUILD_TYPE MATCHES Release)
@@ -55,8 +56,8 @@ endif()
 
 if(CMAKE_C_COMPILER_LOADED)
   message(STATUS "C compiler is: ${CMAKE_C_COMPILER}")
-  #message(STATUS "C compiler version is: ${CMAKE_C_COMPILER_VERSION}")
   
+  message(STATUS "C flags, base configuration: ${CMAKE_C_FLAGS}")
   if(CMAKE_BUILD_TYPE MATCHES Debug)
     message(STATUS "C flags, Debug configuration: ${CMAKE_C_FLAGS_DEBUG}")
   elseif(CMAKE_BUILD_TYPE MATCHES Release)
@@ -72,8 +73,8 @@ endif()
 
 if(CMAKE_ASM_COMPILER_LOADED)
   message(STATUS "ASM compiler is: ${CMAKE_ASM_COMPILER}")
-  #message(STATUS "ASM compiler version is: ${CMAKE_ASM_COMPILER_VERSION}")
   
+  message(STATUS "ASM flags, base configuration: ${CMAKE_ASM_FLAGS}")
   if(CMAKE_BUILD_TYPE MATCHES Debug)
     message(STATUS "ASM flags, Debug configuration: ${CMAKE_ASM_FLAGS_DEBUG}")
   elseif(CMAKE_BUILD_TYPE MATCHES Release)
@@ -107,6 +108,6 @@ if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/application.cmake)
   include(${CMAKE_CURRENT_LIST_DIR}/application.cmake)
   message(STATUS "Building complete application using: ${CMAKE_CURRENT_LIST_DIR}/application.cmake")
 else()
-  message(STATUS "Building application using main only")
+  message(STATUS "Building application using main.c only")
 endif()
 
