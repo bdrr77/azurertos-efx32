@@ -8,7 +8,7 @@
                 "${workspaceFolder}/gecko_sdk_suite/v2.7/platform/Device/SiliconLabs/EFM32GG11B/Include",
 
                 "${workspaceFolder}/threadx/common/inc",
-                "${workspaceFolder}/threadx/ports/cortex_m4/inc"
+                "${workspaceFolder}/threadx/ports/cortex_m4/gnu/inc"
             ],
             "defines": [
                 "EFM32GG11B820F2048GL192=1"

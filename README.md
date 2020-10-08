@@ -52,5 +52,16 @@ CMakeLists.txt
 │   └── seriesx.cmake
 |
 
+---
+
+## Debugging 
+
+Debug can be done using JLink GDB Server from [JLink Download page](https://www.segger.com/downloads/jlink/)
+To initiate a debug session :
+
+1. Run JLink GDB Server : *JLinkGDBServer -device EFM32GG11B820F2048GL192 -if SWD -speed 8000*
+2. Run GDB Client: *arm-none-eabi-gdb azurertos-efx32*
+3. Within GDB, connect to the server : * target extended-remote localhost:2331
+
 
 
