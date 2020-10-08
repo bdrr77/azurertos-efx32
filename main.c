@@ -11,8 +11,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// // #include "em_chip.h"
-// // #include "em_emu.h"
+#include "em_chip.h"
+#include "em_cmu.h"
 
 // /***************************************************************************//**
 //  * @brief  Main function
@@ -92,6 +92,16 @@ void    thread_6_and_7_entry(ULONG thread_input);
 
 int main()
 {
+
+    CHIP_Init();
+
+    // Set System Clock to 72MHz
+    CMU_HFRCOFreqSet(cmuHFRCOFreq_72M0Hz);
+
+    // Init Heartbeat Blue LED0 - Active low on GG11
+    CMU_ClockEnable(cmuClock_GPIO, true);
+    GPIO_PinModeSet(gpioPortH, 12, gpioModePushPull, 1);
+    GPIO_PinOutClear(gpioPortH, 12);
 
     /* Enter the ThreadX kernel.  */
     tx_kernel_enter();
@@ -220,11 +230,14 @@ UINT    status;
     while(1)
     {
 
+        /* Toggle Heartbeat LED  */
+        GPIO_PinOutToggle(gpioPortH, 12);
+
         /* Increment the thread counter.  */
         thread_0_counter++;
 
         /* Sleep for 10 ticks.  */
-        tx_thread_sleep(10);
+        tx_thread_sleep(100);
 
         /* Set event flag 0 to wakeup thread 5.  */
         status =  tx_event_flags_set(&event_flags_0, 0x1, TX_OR);

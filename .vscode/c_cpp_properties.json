@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/gecko_sdk_suite/v2.7/platform/CMSIS/Include/",
+                "${workspaceFolder}/gecko_sdk_suite/v2.7/platform/emlib/inc/",
+                "${workspaceFolder}/gecko_sdk_suite/v2.7/platform/Device/SiliconLabs/EFM32GG11B/Include",
+
+                "${workspaceFolder}/threadx/common/inc",
+                "${workspaceFolder}/threadx/ports/cortex_m4/inc"
+            ],
+            "defines": [
+                "EFM32GG11B820F2048GL192=1"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu18",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "gcc-x64",
+            "browse": {
+                "limitSymbolsToIncludedHeaders": false
+            }
+        }
+    ],
+    "version": 4
+}

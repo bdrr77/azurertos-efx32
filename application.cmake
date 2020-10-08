@@ -28,8 +28,10 @@ add_subdirectory(${THREADX_PROJECT_PATH}/common)
 
 
 ###############################################
-# Gecko SDK Code
+# Gecko SDK & Application Code
 ###############################################
+
+set(PROJECT_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 # Minimal compiling sources
 target_sources(${PROJECT_NAME}
@@ -41,6 +43,12 @@ target_sources(${PROJECT_NAME}
 
     #Emlib
     ${SL_GECKO_SDK_SUITE_PATH}/platform/emlib/src/em_cmu.c
+    ${SL_GECKO_SDK_SUITE_PATH}/platform/emlib/src/em_emu.c
+    ${SL_GECKO_SDK_SUITE_PATH}/platform/emlib/src/em_gpio.c
+
+    #Threadx
+    ${PROJECT_ROOT_DIR}/threadx_port/tx_initialize_low_level.S
+
 )
 
 # Minimal Include Paths
@@ -56,7 +64,7 @@ target_include_directories(${PROJECT_NAME}
     #CMSIS
     ${SL_GECKO_SDK_SUITE_PATH}/platform/CMSIS/Include
 
-    #Others
+    #Threadx
     ${THREADX_PROJECT_PATH}/common/inc
 
 )
