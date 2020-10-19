@@ -4,6 +4,7 @@
 # Azure Third party code
 ###############################################
 
+############ Threadx #############
 #TODO make Cortex and GNU Dynamic
 set(THREADX_ARCH "cortex_m4")
 set(THREADX_TOOLCHAIN "gnu")
@@ -22,10 +23,22 @@ set(CUSTOM_INC_DIR ${CMAKE_CURRENT_BINARY_DIR}/custom_inc)
 
 # Pick up the port specific variables and apply them
 add_subdirectory(${THREADX_PROJECT_PATH}/ports/${THREADX_ARCH}/${THREADX_TOOLCHAIN})
-
 # Pick up the common stuff
 add_subdirectory(${THREADX_PROJECT_PATH}/common)
 
+############ Netxduo #############
+set(NETXDUO_PROJECT_NAME "netxduo")
+set(NETXDUO_PROJECT_PATH "${CMAKE_CURRENT_LIST_DIR}/${NETXDUO_PROJECT_NAME}")
+
+# Pick up the port specific variables and apply them
+add_subdirectory(${NETXDUO_PROJECT_PATH}/ports/${THREADX_ARCH}/${THREADX_TOOLCHAIN})
+# Pick up the common stuff
+add_subdirectory(${NETXDUO_PROJECT_PATH}/common)
+# Pick up the apps directory containing the protocol and app-layer components
+add_subdirectory(${NETXDUO_PROJECT_PATH}/addons)
+# Network security and crypto components
+add_subdirectory(${NETXDUO_PROJECT_PATH}/crypto_libraries)
+add_subdirectory(${NETXDUO_PROJECT_PATH}/nx_secure)
 
 ###############################################
 # Gecko SDK & Application Code
@@ -48,7 +61,9 @@ target_sources(${PROJECT_NAME}
 
     #Threadx
     ${PROJECT_ROOT_DIR}/threadx_port/tx_initialize_low_level.S
-
+    
+    #Netxduo
+    ${PROJECT_ROOT_DIR}/netxduo_port/nx_driver_efm32gg11b_low_level.s
 )
 
 # Minimal Include Paths
@@ -67,11 +82,14 @@ target_include_directories(${PROJECT_NAME}
     #Threadx
     ${THREADX_PROJECT_PATH}/common/inc
 
+    #Netxduo
+    ${NETXDUO_PROJECT_PATH}/common/inc
 )
 
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         -D${SL_TARGET_PART_NO_UPPER_CASE}=1
+        -DNX_DRIVER_SOURCE=1
 )
 
 ###############################################

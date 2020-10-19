@@ -15,13 +15,13 @@
 /**                                                                       */
 /** NetX Component                                                        */
 /**                                                                       */
-/**   Ethernet driver for STM32F7xx family of microprocessors             */
+/**   Ethernet driver for EFM32GG11B family of microprocessors            */
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
 
-#ifndef NX_DRIVER_STM32F746_H
-#define NX_DRIVER_STM32F746_H
+#ifndef NX_DRIVER_EFM32GG11B_H
+#define NX_DRIVER_EFM32GG11B_H
 
 
 #ifdef   __cplusplus
@@ -52,10 +52,6 @@ extern   "C" {
 
 
 /****** DRIVER SPECIFIC ****** Start of part/vendor specific include area.  Include any such files here!  */
-#include "stm32f7xx.h"
-#include "stm32f7xx_hal.h"
-#include "stm32f7xx_hal_eth.h"
-
 
 /****** DRIVER SPECIFIC ****** End of part/vendor specific include file area!  */
 
@@ -117,6 +113,58 @@ extern   "C" {
                                NX_INTERFACE_CAPABILITY_ICMPV6_TX_CHECKSUM | \
                                NX_INTERFACE_CAPABILITY_ICMPV6_RX_CHECKSUM )    
 
+//TX buffer descriptor flags
+#define ETH_TX_USED           0x80000000
+#define ETH_TX_WRAP           0x40000000
+#define ETH_TX_ERROR          0x20000000
+#define ETH_TX_UNDERRUN       0x10000000
+#define ETH_TX_EXHAUSTED      0x08000000
+#define ETH_TX_NO_CRC         0x00010000
+#define ETH_TX_LAST           0x00008000
+#define ETH_TX_LENGTH         0x000007FF
+
+//RX buffer descriptor flags
+#define ETH_RX_ADDRESS        0xFFFFFFFC
+#define ETH_RX_WRAP           0x00000002
+#define ETH_RX_OWNERSHIP      0x00000001
+#define ETH_RX_BROADCAST      0x80000000
+#define ETH_RX_MULTICAST_HASH 0x40000000
+#define ETH_RX_UNICAST_HASH   0x20000000
+#define ETH_RX_EXT_ADDR       0x10000000
+#define ETH_RX_SAR1           0x04000000
+#define ETH_RX_SAR2           0x02000000
+#define ETH_RX_SAR3           0x01000000
+#define ETH_RX_SAR4           0x00800000
+#define ETH_RX_TYPE_ID        0x00400000
+#define ETH_RX_VLAN_TAG       0x00200000
+#define ETH_RX_PRIORITY_TAG   0x00100000
+#define ETH_RX_VLAN_PRIORITY  0x000E0000
+#define ETH_RX_CFI            0x00010000
+#define ETH_RX_EOF            0x00008000
+#define ETH_RX_SOF            0x00004000
+#define ETH_RX_OFFSET         0x00003000
+#define ETH_RX_LENGTH         0x00000FFF
+
+/**
+ * @brief Transmit buffer descriptor
+ **/
+
+typedef struct
+{
+   uint32_t address;
+   uint32_t status;
+} Efm32gg11TxBufferDesc;
+
+/**
+ * @brief Receive buffer descriptor
+ **/
+
+typedef struct
+{
+   uint32_t address;
+   uint32_t status;
+} Efm32gg11RxBufferDesc;
+
 /****** DRIVER SPECIFIC ****** End of part/vendor specific constant area!  */
 
 
@@ -155,13 +203,13 @@ typedef struct NX_DRIVER_INFORMATION_STRUCT
     UINT                nx_driver_information_number_of_transmit_buffers_in_use;
 
     /* Define the Ethernet RX & TX DMA Descriptors.  */
-    ETH_DMADescTypeDef  nx_driver_information_dma_rx_descriptors[NX_DRIVER_RX_DESCRIPTORS];
-    ETH_DMADescTypeDef  nx_driver_information_dma_tx_descriptors[NX_DRIVER_TX_DESCRIPTORS]; 
+    Efm32gg11RxBufferDesc  nx_driver_information_dma_rx_descriptors[NX_DRIVER_RX_DESCRIPTORS];
+    Efm32gg11TxBufferDesc  nx_driver_information_dma_tx_descriptors[NX_DRIVER_TX_DESCRIPTORS];
 
     /* Define the association between buffer descriptors and NetX packets.  */
     NX_PACKET           *nx_driver_information_transmit_packets[NX_DRIVER_TX_DESCRIPTORS];
     NX_PACKET           *nx_driver_information_receive_packets[NX_DRIVER_RX_DESCRIPTORS];
-    
+
     /* Define the size of a rx buffer size.  */
     ULONG               nx_driver_information_rx_buffer_size;
 
@@ -191,11 +239,11 @@ typedef struct NX_DRIVER_INFORMATION_STRUCT
     
 /* Define global driver entry function. */
 
-VOID  nx_driver_stm32f7xx(NX_IP_DRIVER *driver_req_ptr);
+VOID  nx_driver_efm32gg11b(NX_IP_DRIVER *driver_req_ptr);
 
 /* Define global driver interrupt dispatch function.  */
 
-VOID  nx_driver_stm32f7xx_ethernet_isr(void);
+VOID  nx_driver_efm32gg11b_ethernet_isr(void);
 
 /****** DRIVER SPECIFIC ****** End of part/vendor specific external function prototypes.  */
 

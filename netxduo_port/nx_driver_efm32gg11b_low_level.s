@@ -25,7 +25,7 @@
 @
     .global  _tx_thread_context_save
     .global  _tx_thread_context_restore
-    .global  nx_driver_stm32f7xx_ethernet_isr
+    .global  nx_driver_efm32gg11b_ethernet_isr
 
     .text 32
     .align 4
@@ -34,7 +34,7 @@
 @/*                                                                        */
 @/*  FUNCTION                                               RELEASE        */
 @/*                                                                        */
-@/*    __nx_driver_stm32f7xx_ethernet_isr                STM32F7xx/GNU     */
+@/*    __nx_driver_efm32gg11b_ethernet_isr                EFM32GG11B/GNU   */
 @/*                                                           6.x          */
 @/*  AUTHOR                                                                */
 @/*                                                                        */
@@ -43,7 +43,7 @@
 @/*  DESCRIPTION                                                           */
 @/*                                                                        */
 @/*    This function is responsible for fielding the etherent interrupts   */
-@/*    of the STM32F7xx.                                                   */
+@/*    of the EFM32GG11B.                                                  */
 @/*                                                                        */
 @/*  INPUT                                                                 */
 @/*                                                                        */
@@ -55,7 +55,7 @@
 @/*                                                                        */
 @/*  CALLS                                                                 */
 @/*                                                                        */
-@/*    nx_driver_stm32f7xx_ethernet_isr      NetX driver ethernet ISR      */
+@/*    nx_driver_efm32gg11b_ethernet_isr      NetX driver ethernet ISR     */
 @/*                                                                        */
 @/*  CALLED BY                                                             */
 @/*                                                                        */
@@ -69,19 +69,20 @@
 @/*  xx-xx-xxxx     Scott Larson             Update comments and push r0   */
 @/*                                            for 8-byte stack alignment. */
 @/*                                            resulting in version 6.x.   */
+@/*  10-09-2020     Brian Rodrigues          Converting it to EFM32GG11    */
 @/*                                                                        */
 @/**************************************************************************/
     .global  ETH_IRQHandler
-    .global  __nx_driver_stm32f7xx_ethernet_isr 
+    .global  __nx_driver_efm32gg11b_ethernet_isr 
 .thumb_func
 ETH_IRQHandler:
 .thumb_func
-__nx_driver_stm32f7xx_ethernet_isr:
+__nx_driver_efm32gg11b_ethernet_isr:
     PUSH    {r0, lr}
 #ifdef TX_ENABLE_EXECUTION_CHANGE_NOTIFY
     BL      _tx_execution_isr_enter             @ Call the ISR enter function
 #endif
-    BL      nx_driver_stm32f7xx_ethernet_isr
+    BL      nx_driver_efm32gg11b_ethernet_isr
 #ifdef TX_ENABLE_EXECUTION_CHANGE_NOTIFY
     BL      _tx_execution_isr_exit              @ Call the ISR exit function
 #endif
