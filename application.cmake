@@ -64,6 +64,7 @@ target_sources(${PROJECT_NAME}
     
     #Netxduo
     ${PROJECT_ROOT_DIR}/netxduo_port/nx_driver_efm32gg11b_low_level.s
+    ${PROJECT_ROOT_DIR}/netxduo_port/nx_driver_efm32gg11b.c
 )
 
 # Minimal Include Paths
@@ -84,12 +85,13 @@ target_include_directories(${PROJECT_NAME}
 
     #Netxduo
     ${NETXDUO_PROJECT_PATH}/common/inc
+    ${PROJECT_ROOT_DIR}/netxduo_port
 )
 
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         -D${SL_TARGET_PART_NO_UPPER_CASE}=1
-        -DNX_DRIVER_SOURCE=1
+        #-DNX_DRIVER_SOURCE=1
 )
 
 ###############################################

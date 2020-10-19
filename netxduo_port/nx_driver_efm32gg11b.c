@@ -1537,6 +1537,7 @@ static UINT  _nx_driver_hardware_initialize(NX_IP_DRIVER *driver_req_ptr)
 
 NX_PACKET           *packet_ptr;
 UINT                i;
+uint32_t address;
 
     /* Default to successful return.  */
     driver_req_ptr -> nx_ip_driver_status =  NX_SUCCESS;
@@ -1648,9 +1649,6 @@ UINT                i;
     //Configure the receive filter
     ETH->NETWORKCFG |= _ETH_NETWORKCFG_RX1536BYTEFRAMES_MASK |
        _ETH_NETWORKCFG_MULTICASTHASHEN_MASK;
-
-    uint8_t i;
-    uint32_t address;
   
     //Initialize TX buffer descriptors
     for(i = 0; i < NX_DRIVER_TX_DESCRIPTORS; i++)
@@ -1689,9 +1687,6 @@ UINT                i;
 
             /* Set Own bit of the RX descriptor Status.  */
             nx_driver_information.nx_driver_information_dma_rx_descriptors[i].status = ETH_RX_OWNERSHIP;
-
-            
-            SCB_CleanInvalidateDCache_by_Addr((uint32_t*)packet_ptr -> nx_packet_data_start, packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_data_start);
         }
         else
         {
@@ -1946,8 +1941,6 @@ TX_INTERRUPT_SAVE_AREA
     
     /* Clear the first Descriptor's LS bit.  */
     nx_driver_information.nx_driver_information_dma_tx_descriptors[curIdx].status &= ~ETH_TX_LAST;
-
-    SCB_CleanDCache_by_Addr((uint32_t*)(packet_ptr -> nx_packet_data_start), packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_data_start);
     
     /* Find next packet.  */
     for (pktIdx = packet_ptr -> nx_packet_next;
@@ -1978,8 +1971,6 @@ TX_INTERRUPT_SAVE_AREA
 
         /* Increment the BD count.  */
         bd_count++;
-        
-        SCB_CleanDCache_by_Addr((uint32_t*)(packet_ptr -> nx_packet_data_start), packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_data_start);        
        
     }
     
@@ -2388,7 +2379,6 @@ NX_PACKET     *received_packet_ptr = nx_driver_information.nx_driver_information
                     nx_driver_information.nx_driver_information_dma_rx_descriptors[temp_idx].status = ETH_RX_OWNERSHIP;
                     nx_driver_information.nx_driver_information_receive_packets[temp_idx] = packet_ptr;
                     
-                    SCB_InvalidateDCache_by_Addr((uint32_t*)packet_ptr -> nx_packet_data_start, packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_data_start);
                       
                 }
                 else
