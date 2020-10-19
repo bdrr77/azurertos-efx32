@@ -1,9 +1,13 @@
 /* This is a small ping demo of the high-performance NetX Duo TCP/IP stack.  */
 
+#include "em_chip.h"
+#include "em_cmu.h"
+
+#include "retargetserial.h"
+
 #include "tx_api.h"
 #include "nx_api.h"
 #include "nxd_dhcp_client.h"
-#include "stm32f7xx_hal.h"
 
 
 /* Define the ThreadX and NetX object control blocks...  */
@@ -44,14 +48,21 @@ ULONG             error_counter;
 VOID    thread_0_entry(ULONG thread_input);
 #endif
 
-VOID  nx_driver_stm32f7xx(NX_IP_DRIVER *driver_req_ptr);
-
-VOID hardware_setup(void);
+extern VOID  nx_driver_efm32gg11b(NX_IP_DRIVER *driver_req_ptr);
 
 int main(int argc, char ** argv)
 {
-    /* Setup the hardware. */
-    hardware_setup();
+    CHIP_Init();
+
+    // Set System Clock to 72MHz
+    CMU_HFRCOFreqSet(cmuHFRCOFreq_72M0Hz);
+
+    // Init Heartbeat Blue LED0 - Active low on GG11
+    CMU_ClockEnable(cmuClock_GPIO, true);
+    GPIO_PinModeSet(gpioPortH, 12, gpioModePushPull, 1);
+    GPIO_PinOutClear(gpioPortH, 12);
+
+    RETARGET_SerialInit();
 
     /* Enter the ThreadX kernel.  */
     tx_kernel_enter();
@@ -83,10 +94,10 @@ UINT  status;
                           IP_ADDRESS(0,0,0,0),
                           IP_ADDRESS(0,0,0,0), 
 #else
-                          IP_ADDRESS(192, 168, 111, 2), 
+                          IP_ADDRESS(192, 168, 1, 192), 
                           0xFFFFFF00UL, 
 #endif
-                          &pool_0, nx_driver_stm32f7xx,
+                          &pool_0, nx_driver_efm32gg11b,
                           (UCHAR*)ip_thread_stack,
                           sizeof(ip_thread_stack),
                           1);

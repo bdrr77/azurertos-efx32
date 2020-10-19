@@ -6,6 +6,9 @@
                 "${workspaceFolder}/gecko_sdk_suite/v2.7/platform/CMSIS/Include/",
                 "${workspaceFolder}/gecko_sdk_suite/v2.7/platform/emlib/inc/",
                 "${workspaceFolder}/gecko_sdk_suite/v2.7/platform/Device/SiliconLabs/EFM32GG11B/Include",
+                "${workspaceFolder}/gecko_sdk_suite/v2.7/hardware/kit/common/drivers",
+                "${workspaceFolder}/gecko_sdk_suite/v2.7/hardware/kit/common/bsp",
+                "${workspaceFolder}/gecko_sdk_suite/v2.7/hardware/kit/SLSTK3701A_EFM32GG11/config",
 
                 "${workspaceFolder}/threadx/common/inc",
                 "${workspaceFolder}/threadx/ports/cortex_m4/gnu/inc",
@@ -15,7 +18,7 @@
             ],
             "defines": [
                 "EFM32GG11B820F2048GL192=1",
-                "NX_DRIVER_SOURCE=1"
+                "RETARGET_VCOM=1"
             ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "gnu18",

@@ -58,6 +58,12 @@ target_sources(${PROJECT_NAME}
     ${SL_GECKO_SDK_SUITE_PATH}/platform/emlib/src/em_cmu.c
     ${SL_GECKO_SDK_SUITE_PATH}/platform/emlib/src/em_emu.c
     ${SL_GECKO_SDK_SUITE_PATH}/platform/emlib/src/em_gpio.c
+    ${SL_GECKO_SDK_SUITE_PATH}/platform/emlib/src/em_core.c
+    ${SL_GECKO_SDK_SUITE_PATH}/platform/emlib/src/em_usart.c
+
+    #Retargeting printf
+    ${SL_GECKO_SDK_SUITE_PATH}/hardware/kit/common/drivers/retargetio.c
+    ${SL_GECKO_SDK_SUITE_PATH}/hardware/kit/common/drivers/retargetserial.c
 
     #Threadx
     ${PROJECT_ROOT_DIR}/threadx_port/tx_initialize_low_level.S
@@ -80,6 +86,11 @@ target_include_directories(${PROJECT_NAME}
     #CMSIS
     ${SL_GECKO_SDK_SUITE_PATH}/platform/CMSIS/Include
 
+    #Retargeting printf
+    ${SL_GECKO_SDK_SUITE_PATH}/hardware/kit/common/drivers/
+    ${SL_GECKO_SDK_SUITE_PATH}/hardware/kit/common/bsp/
+    ${SL_GECKO_SDK_SUITE_PATH}/hardware/kit/SLSTK3701A_EFM32GG11/config
+
     #Threadx
     ${THREADX_PROJECT_PATH}/common/inc
 
@@ -91,6 +102,7 @@ target_include_directories(${PROJECT_NAME}
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         -D${SL_TARGET_PART_NO_UPPER_CASE}=1
+        -DRETARGET_VCOM=1
         #-DNX_DRIVER_SOURCE=1
 )
 

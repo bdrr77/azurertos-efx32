@@ -41,5 +41,5 @@ set(CMAKE_ASM_FLAGS_MINSIZEREL "")
 #######################################
 ######## Linker flags Config  #########
 #######################################
-set(CMAKE_C_LINK_FLAGS "-mcpu=cortex-m33 -mthumb -T ${SL_TARGET_PART_SOURCE_PATH}/Source/${SL_TOOLCHAIN}/${SL_TARGET_PART_LOWER_CASE}.ld -Xlinker --gc-sections -Xlinker -Map=${CMAKE_PROJECT_NAME}.map -mfpu=fpv5-sp-d16 -mfloat-abi=hard --specs=nano.specs -Wl,--start-group -lgcc -lc -lm -lnosys -Wl,--end-group")
+set(CMAKE_C_LINK_FLAGS "-mcpu=cortex-m33 -mthumb -T ${SL_TARGET_PART_SOURCE_PATH}/Source/${SL_TOOLCHAIN}/${SL_TARGET_PART_LOWER_CASE}.ld -Xlinker --gc-sections -Xlinker -Map=${CMAKE_PROJECT_NAME}.map -mfpu=fpv5-sp-d16 -mfloat-abi=hard --specs=nano.specs -Wl,--start-group -lgcc -lc -lm -Wl,--end-group")
 #TODO CXX linker flags CMAKE_CXX_LINK_FLAGS

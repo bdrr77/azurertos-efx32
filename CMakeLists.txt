@@ -102,7 +102,17 @@ endif()
 #######################################
 
 #Start from main
-add_executable(${PROJECT_NAME} main.c)
+
+
+if(DEFINED BUILD_THREADX_SAMPLE_APP)
+  message(STATUS "Building ThreadX sample application")
+  add_executable(${PROJECT_NAME} main.c)
+elseif(DEFINED BUILD_NETXDUO_SAMPLE_APP)
+  message(STATUS "Building NetXDuo sample application")
+  add_executable(${PROJECT_NAME} sample_netx_duo_ping.c)
+else()
+  message(FATAL_ERROR "Specify a sample application to build")
+endif()
 
 if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/application.cmake)
   include(${CMAKE_CURRENT_LIST_DIR}/application.cmake)
