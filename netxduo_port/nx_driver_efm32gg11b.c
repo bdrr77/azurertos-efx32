@@ -1603,6 +1603,9 @@ uint32_t address;
     //Configure ETH_MDC (PD14)
     GPIO_PinModeSet(gpioPortD, 14, gpioModePushPull, 0);
   
+    //Enable GPIO clock
+    CMU_ClockEnable(cmuClock_ETH, true);
+
     //Remap RMII pins
     ETH->ROUTELOC1 = (ETH->ROUTELOC1 & ~(_ETH_ROUTELOC1_RMIILOC_MASK & _ETH_ROUTELOC1_MDIOLOC_MASK)) | (ETH_ROUTELOC1_RMIILOC_LOC1 | ETH_ROUTELOC1_MDIOLOC_LOC1);
   
@@ -1626,29 +1629,20 @@ uint32_t address;
     GPIO_PinOutSet(gpioPortH, 7);
     tx_thread_sleep(10);
 
-    //Configure MDC clock speed
-    ETH->NETWORKCFG = (4 << _ETH_NETWORKCFG_MDCCLKDIV_SHIFT) &
-       _ETH_NETWORKCFG_MDCCLKDIV_MASK;
+    ETH->NETWORKCFG |= ETH_NETWORKCFG_SPEED ;
+    ETH->NETWORKCFG |= ETH_NETWORKCFG_FULLDUPLEX ;
+    ETH->NETWORKCFG |= ETH_NETWORKCFG_FCSREMOVE;
+    ETH->NETWORKCFG |= ETH_NETWORKCFG_MDCCLKDIV_DIVBY32;
+    ETH->NETWORKCFG |= ETH_NETWORKCFG_MULTICASTHASHEN;
+    ETH->NETWORKCFG |= ETH_NETWORKCFG_UNICASTHASHEN;
   
-    //Enable management port (MDC and MDIO)
-    ETH->NETWORKCTRL |= _ETH_NETWORKCTRL_MANPORTEN_MASK;
-
     //Set the MAC address of the station
     ETH->SPECADDR1BOTTOM    =   *((uint32_t *)(&_nx_driver_hardware_address[0]));
     ETH->SPECADDR1TOP       =   *((uint16_t *)(&_nx_driver_hardware_address[4]));
   
-    //The MAC supports 3 additional addresses for unicast perfect filtering
-    ETH->SPECADDR2BOTTOM = 0;
-    ETH->SPECADDR3BOTTOM = 0;
-    ETH->SPECADDR4BOTTOM = 0;
-  
     //Initialize hash table
     ETH->HASHBOTTOM = 0;
     ETH->HASHTOP = 0;
-  
-    //Configure the receive filter
-    ETH->NETWORKCFG |= _ETH_NETWORKCFG_RX1536BYTEFRAMES_MASK |
-       _ETH_NETWORKCFG_MULTICASTHASHEN_MASK;
   
     //Initialize TX buffer descriptors
     for(i = 0; i < NX_DRIVER_TX_DESCRIPTORS; i++)
@@ -1711,37 +1705,16 @@ uint32_t address;
     //Start location of the RX descriptor list
     ETH->RXQPTR = (ULONG) nx_driver_information.nx_driver_information_dma_rx_descriptors;
 
-    //Clear transmit status register
-    ETH->TXSTATUS = _ETH_TXSTATUS_TXUNDERRUN_MASK |
-       _ETH_TXSTATUS_TXCMPLT_MASK | _ETH_TXSTATUS_AMBAERR_MASK |
-       _ETH_TXSTATUS_TXGO_MASK | _ETH_TXSTATUS_RETRYLMTEXCD_MASK |
-       _ETH_TXSTATUS_COLOCCRD_MASK | _ETH_TXSTATUS_USEDBITREAD_MASK;
+    ETH->IFCR |= 0xFFFFFFFF;
+    ETH->TXSTATUS = 0xFFFFFFFF;
+    ETH->RXSTATUS = 0xFFFFFFFF;
+    ETH->IENS = ETH_IENS_TXCMPLT | ETH_IENS_RXCMPLT;
+
+    NVIC_EnableIRQ(ETH_IRQn);
   
-    //Clear receive status register
-    ETH->RXSTATUS = _ETH_RXSTATUS_RXOVERRUN_MASK | _ETH_RXSTATUS_FRMRX_MASK |
-       _ETH_RXSTATUS_BUFFNOTAVAIL_MASK;
-  
-    //First disable all interrupts
-    ETH->IENC = 0xFFFFFFFF;
-  
-    //Only the desired ones are enabled
-    ETH->IENS = _ETH_IENS_RXOVERRUN_MASK |
-       _ETH_IENS_TXCMPLT_MASK | _ETH_IENS_AMBAERR_MASK |
-       _ETH_IENS_RTRYLMTORLATECOL_MASK | _ETH_IENS_TXUNDERRUN_MASK |
-       _ETH_IENS_RXUSEDBITREAD_MASK | _ETH_IENS_RXCMPLT_MASK;
-  
-    //Read ETH_IFCR register to clear any pending interrupt
-    ETH->IFCR;
-  
-    // //Set priority grouping (3 bits for pre-emption priority, no bits for subpriority)
-    // NVIC_SetPriorityGrouping(EFM32GG11_ETH_IRQ_PRIORITY_GROUPING);
-  
-    // //Configure Ethernet interrupt priority
-    // NVIC_SetPriority(ETH_IRQn, NVIC_EncodePriority(EFM32GG11_ETH_IRQ_PRIORITY_GROUPING,
-    //    EFM32GG11_ETH_IRQ_GROUP_PRIORITY, EFM32GG11_ETH_IRQ_SUB_PRIORITY));
-  
-    //Enable the transmitter and the receiver
-    ETH->NETWORKCTRL |= _ETH_NETWORKCTRL_ENBTX_MASK | _ETH_NETWORKCTRL_ENBRX_MASK;
+    //Enable the transmitter and the receiver &management port (MDC and MDIO)
+    ETH->NETWORKCTRL |= ETH_NETWORKCTRL_ENBTX | ETH_NETWORKCTRL_ENBRX | ETH_NETWORKCTRL_MANPORTEN;
+    ETH->CTRL = ETH_CTRL_GBLCLKEN;
 
     /* Return success!  */
     return(NX_SUCCESS);
@@ -2566,6 +2539,7 @@ ULONG deffered_events;
     {
         //Only clear TXSTATUS flags that are currently set
         ETH->TXSTATUS = tsr;
+        printf("Tx'd packet\n");
 
 #ifdef NX_DRIVER_ENABLE_DEFERRED
 
@@ -2584,6 +2558,7 @@ ULONG deffered_events;
    if((rsr & (_ETH_RXSTATUS_RXOVERRUN_MASK | _ETH_RXSTATUS_FRMRX_MASK |
       _ETH_RXSTATUS_BUFFNOTAVAIL_MASK)) != 0)
    {
+       printf("Rx'd packet\n");
 #ifdef NX_DRIVER_ENABLE_DEFERRED
 
         /* Set the receive packet interrupt.  */

@@ -63,7 +63,7 @@ int main(int argc, char ** argv)
     GPIO_PinOutClear(gpioPortH, 12);
 
     RETARGET_SerialInit();
-
+    printf("\r\nEntering the kernel...\r\n");
     /* Enter the ThreadX kernel.  */
     tx_kernel_enter();
 }

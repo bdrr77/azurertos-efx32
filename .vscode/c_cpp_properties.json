@@ -14,6 +14,7 @@
                 "${workspaceFolder}/threadx/ports/cortex_m4/gnu/inc",
 
                 "${workspaceFolder}/netxduo/common/inc",
+                "${workspaceFolder}/netxduo/addons/dhcp",
                 "${workspaceFolder}/netxduo/ports/cortex_m4/gnu/inc"
             ],
             "defines": [
